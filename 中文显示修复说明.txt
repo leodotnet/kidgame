@@ -1,0 +1,45 @@
+贪吃蛇游戏中文显示问题修复说明
+=====================================
+
+问题描述：
+游戏中的中文文字显示为方块，无法正常显示中文字符。
+
+问题原因：
+原代码使用 pygame.font.Font(None, 36) 创建字体，这个默认字体不支持中文字符。
+
+解决方案：
+1. 安装中文字体包：
+   - fonts-wqy-zenhei (文泉驿正黑)
+   - fonts-wqy-microhei (文泉驿微米黑)
+   - fonts-noto-cjk (Noto CJK字体)
+
+2. 修改字体加载代码：
+   在 snake_game.py 的 Game 类 __init__ 方法中，将：
+   ```python
+   self.font = pygame.font.Font(None, 36)
+   ```
+   
+   替换为：
+   ```python
+   # 使用支持中文的字体
+   try:
+       # 尝试使用文泉驿正黑字体
+       self.font = pygame.font.Font("/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc", 36)
+   except:
+       try:
+           # 如果文泉驿正黑不可用，尝试使用Noto字体
+           self.font = pygame.font.Font("/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc", 36)
+       except:
+           # 如果都不可用，使用系统默认字体（但可能不支持中文）
+           self.font = pygame.font.Font(None, 36)
+   ```
+
+修复结果：
+✓ 游戏标题 "贪吃蛇游戏" 正常显示
+✓ 得分显示 "得分: XXX" 正常显示
+✓ 游戏结束提示 "游戏结束" 正常显示
+✓ 重新开始提示 "按空格键重新开始" 正常显示
+✓ 所有中文字符都能正确渲染，不再显示为方块
+
+测试状态：
+所有中文文本渲染测试均已通过，问题已完全解决。
