@@ -95,19 +95,44 @@ class Game:
         self.snake = Snake()
         self.food = Food()
         self.score = 0
-        # 使用支持中文的字体
-        try:
-            # 尝试使用文泉驿正黑字体
-            self.font = pygame.font.Font("/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc", 36)
-        except:
-            try:
-                # 如果文泉驿正黑不可用，尝试使用Noto字体
-                self.font = pygame.font.Font("/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc", 36)
-            except:
-                # 如果都不可用，使用系统默认字体（但可能不支持中文）
-                self.font = pygame.font.Font(None, 36)
-        self.game_over = False
         
+        # 改进的中文字体加载
+        self.font = self._load_chinese_font()
+        self.game_over = False
+    
+    def _load_chinese_font(self):
+        """加载支持中文的字体"""
+        font_paths = [
+            # 文泉驿字体
+            "/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc",
+            "/usr/share/fonts/truetype/wqy/wqy-microhei.ttc",
+            # Noto CJK字体
+            "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc",
+            "/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc",
+            # 其他可能的字体路径
+            "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+            "/System/Library/Fonts/PingFang.ttc",  # macOS
+            "C:/Windows/Fonts/msyh.ttc",  # Windows 微软雅黑
+        ]
+        
+        # 尝试加载字体
+        for font_path in font_paths:
+            try:
+                font = pygame.font.Font(font_path, 36)
+                print(f"成功加载字体: {font_path}")
+                return font
+            except (FileNotFoundError, OSError) as e:
+                print(f"字体加载失败: {font_path} - {e}")
+                continue
+        
+        # 如果所有字体都失败，尝试系统字体
+        try:
+            print("尝试使用系统默认字体...")
+            return pygame.font.SysFont('simsun,arial,helvetica,sans-serif', 36)
+        except:
+            print("使用pygame默认字体（可能不支持中文）")
+            return pygame.font.Font(None, 36)
+    
     def handle_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
