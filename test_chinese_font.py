@@ -22,17 +22,19 @@ def test_chinese_fonts():
         "中文显示测试 ABC 123"
     ]
     
-    # Mac系统字体路径
+    # Mac系统字体路径（STHeiti 优先）
     font_paths = [
+        "/System/Library/Fonts/STHeiti Light.ttc",
+        "/System/Library/Fonts/STHeiti Medium.ttc", 
+        "/System/Library/Fonts/STHeiti.ttc",
         "/System/Library/Fonts/PingFang.ttc",
-        "/System/Library/Fonts/STHeiti Light.ttc", 
         "/System/Library/Fonts/Hiragino Sans GB.ttc",
         "/System/Library/Fonts/Arial Unicode MS.ttf",
         "/Library/Fonts/Arial Unicode MS.ttf"
     ]
     
-    # Mac系统字体名称
-    mac_fonts = ['PingFang SC', 'Hiragino Sans GB', 'STHeiti', 'Arial Unicode MS']
+    # Mac系统字体名称（STHeiti 优先）
+    mac_fonts = ['STHeiti', 'STHeiti Light', 'STHeiti Medium', 'PingFang SC', 'Hiragino Sans GB', 'Arial Unicode MS']
     
     print("🔍 Mac中文字体测试")
     print("=" * 50)

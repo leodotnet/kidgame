@@ -14,23 +14,27 @@
 ## 🔧 字体支持系统
 
 ### Mac系统内置字体（优先使用）
-1. **PingFang SC** (苹方) - macOS Sierra及以后版本
-2. **Hiragino Sans GB** (冬青黑体简体中文) - 经典Mac中文字体
-3. **STHeiti Light/Medium** (华文黑体) - 传统Mac中文字体
+1. **STHeiti Light/Medium** (华文黑体) - 优先使用的传统Mac中文字体
+2. **PingFang SC** (苹方) - macOS Sierra及以后版本
+3. **Hiragino Sans GB** (冬青黑体简体中文) - 经典Mac中文字体
 4. **Arial Unicode MS** - 通用Unicode字体
 
 ### 字体加载优先级
 ```
-1. 文件路径字体 (直接加载字体文件)
+1. 文件路径字体 (直接加载字体文件) - STHeiti 优先
+   └── /System/Library/Fonts/STHeiti Light.ttc
+   └── /System/Library/Fonts/STHeiti Medium.ttc
+   └── /System/Library/Fonts/STHeiti.ttc
    └── /System/Library/Fonts/PingFang.ttc
    └── /System/Library/Fonts/Hiragino Sans GB.ttc
-   └── /System/Library/Fonts/STHeiti Light.ttc
    └── /Library/Fonts/Arial Unicode MS.ttf
 
-2. 系统字体名称 (通过系统字体API)
+2. 系统字体名称 (通过系统字体API) - STHeiti 优先
+   └── STHeiti
+   └── STHeiti Light
+   └── STHeiti Medium
    └── PingFang SC
    └── Hiragino Sans GB  
-   └── STHeiti
    └── Arial Unicode MS
 
 3. 降级方案
@@ -118,13 +122,13 @@ chmod +x setup_mac.sh run_mac.sh
 
 | macOS版本 | 支持状态 | 推荐字体 |
 |-----------|----------|----------|
-| macOS 12+ (Monterey) | ✅ 完全支持 | PingFang SC |
-| macOS 11 (Big Sur) | ✅ 完全支持 | PingFang SC |
-| macOS 10.15 (Catalina) | ✅ 完全支持 | PingFang SC |
-| macOS 10.14 (Mojave) | ✅ 完全支持 | PingFang SC |
-| macOS 10.13 (High Sierra) | ✅ 完全支持 | PingFang SC |
-| macOS 10.12 (Sierra) | ✅ 完全支持 | PingFang SC |
-| macOS 10.11 (El Capitan) | ⚠️ 基本支持 | Hiragino Sans GB |
+| macOS 12+ (Monterey) | ✅ 完全支持 | STHeiti |
+| macOS 11 (Big Sur) | ✅ 完全支持 | STHeiti |
+| macOS 10.15 (Catalina) | ✅ 完全支持 | STHeiti |
+| macOS 10.14 (Mojave) | ✅ 完全支持 | STHeiti |
+| macOS 10.13 (High Sierra) | ✅ 完全支持 | STHeiti |
+| macOS 10.12 (Sierra) | ✅ 完全支持 | STHeiti |
+| macOS 10.11 (El Capitan) | ⚠️ 基本支持 | STHeiti |
 
 ## 🎮 使用体验
 
