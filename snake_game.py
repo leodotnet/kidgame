@@ -103,16 +103,25 @@ class Game:
     def _load_chinese_font(self):
         """加载支持中文的字体"""
         font_paths = [
-            # 文泉驿字体
+            # macOS 系统字体（优先）
+            "/System/Library/Fonts/PingFang.ttc",
+            "/System/Library/Fonts/Helvetica.ttc",
+            "/System/Library/Fonts/STHeiti Light.ttc",
+            "/System/Library/Fonts/STHeiti Medium.ttc",
+            "/System/Library/Fonts/Hiragino Sans GB.ttc",
+            "/System/Library/Fonts/Arial Unicode MS.ttf",
+            "/Library/Fonts/Arial Unicode MS.ttf",
+            # Homebrew 安装的字体
+            "/usr/local/share/fonts/wqy-zenhei.ttc",
+            "/usr/local/share/fonts/wqy-microhei.ttc",
+            # Linux 字体（保持兼容性）
             "/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc",
             "/usr/share/fonts/truetype/wqy/wqy-microhei.ttc",
-            # Noto CJK字体
             "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc",
             "/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc",
-            # 其他可能的字体路径
             "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
-            "/System/Library/Fonts/PingFang.ttc",  # macOS
-            "C:/Windows/Fonts/msyh.ttc",  # Windows 微软雅黑
+            # Windows 字体（保持兼容性）
+            "C:/Windows/Fonts/msyh.ttc",
         ]
         
         # 尝试加载字体
@@ -128,6 +137,16 @@ class Game:
         # 如果所有字体都失败，尝试系统字体
         try:
             print("尝试使用系统默认字体...")
+            # macOS 系统字体名称
+            mac_fonts = ['PingFang SC', 'Hiragino Sans GB', 'STHeiti', 'Arial Unicode MS']
+            for font_name in mac_fonts:
+                try:
+                    font = pygame.font.SysFont(font_name, 36)
+                    print(f"成功加载系统字体: {font_name}")
+                    return font
+                except:
+                    continue
+            # 通用字体
             return pygame.font.SysFont('simsun,arial,helvetica,sans-serif', 36)
         except:
             print("使用pygame默认字体（可能不支持中文）")
