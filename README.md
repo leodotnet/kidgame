@@ -1,0 +1,1 @@
+这是一个让孩子来尝试vibe Coding的项目。孩子通过vibe coding的方式来编写一款游戏。
