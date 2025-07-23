@@ -95,7 +95,17 @@ class Game:
         self.snake = Snake()
         self.food = Food()
         self.score = 0
-        self.font = pygame.font.Font(None, 36)
+        # 使用支持中文的字体
+        try:
+            # 尝试使用文泉驿正黑字体
+            self.font = pygame.font.Font("/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc", 36)
+        except:
+            try:
+                # 如果文泉驿正黑不可用，尝试使用Noto字体
+                self.font = pygame.font.Font("/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc", 36)
+            except:
+                # 如果都不可用，使用系统默认字体（但可能不支持中文）
+                self.font = pygame.font.Font(None, 36)
         self.game_over = False
         
     def handle_events(self):
