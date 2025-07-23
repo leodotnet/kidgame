@@ -1,6 +1,7 @@
 import pygame
 import random
 import sys
+import math
 
 # 初始化pygame
 pygame.init()
@@ -19,12 +20,79 @@ GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
 DARK_GREEN = (0, 100, 0)
+ORANGE = (255, 165, 0)
+YELLOW = (255, 255, 0)
 
 # 方向常量
 UP = (0, -1)
 DOWN = (0, 1)
 LEFT = (-1, 0)
 RIGHT = (1, 0)
+
+class Particle:
+    def __init__(self, x, y, color):
+        self.x = x
+        self.y = y
+        self.vx = random.uniform(-5, 5)
+        self.vy = random.uniform(-5, 5)
+        self.color = color
+        self.life = 60  # 粒子生命周期（帧数）
+        self.max_life = 60
+        self.size = random.uniform(2, 6)
+        
+    def update(self):
+        self.x += self.vx
+        self.y += self.vy
+        self.vy += 0.1  # 重力效果
+        self.life -= 1
+        
+        # 减小粒子大小
+        self.size = max(0, self.size * 0.98)
+        
+        return self.life > 0
+    
+    def draw(self, screen):
+        if self.life > 0:
+            # 根据生命周期调整透明度
+            alpha = int(255 * (self.life / self.max_life))
+            color_with_alpha = (*self.color, alpha)
+            
+            # 创建一个带透明度的表面
+            particle_surface = pygame.Surface((int(self.size * 2), int(self.size * 2)), pygame.SRCALPHA)
+            pygame.draw.circle(particle_surface, color_with_alpha, 
+                             (int(self.size), int(self.size)), int(self.size))
+            screen.blit(particle_surface, (self.x - self.size, self.y - self.size))
+
+class Explosion:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.particles = []
+        self.active = True
+        self.explosion_sound_played = False
+        
+        # 创建爆炸粒子
+        colors = [RED, ORANGE, YELLOW, WHITE]
+        for _ in range(30):  # 创建30个粒子
+            color = random.choice(colors)
+            particle = Particle(x, y, color)
+            self.particles.append(particle)
+    
+    def update(self):
+        if not self.active:
+            return
+            
+        # 更新所有粒子
+        self.particles = [p for p in self.particles if p.update()]
+        
+        # 如果没有粒子了，爆炸结束
+        if not self.particles:
+            self.active = False
+    
+    def draw(self, screen):
+        if self.active:
+            for particle in self.particles:
+                particle.draw(screen)
 
 class Snake:
     def __init__(self):
@@ -39,11 +107,11 @@ class Snake:
         # 检查边界碰撞
         if (new_head[0] < 0 or new_head[0] >= CELL_NUMBER_X or 
             new_head[1] < 0 or new_head[1] >= CELL_NUMBER_Y):
-            return False
+            return False, "wall"  # 返回碰撞类型
             
         # 检查自身碰撞
         if new_head in self.body:
-            return False
+            return False, "self"  # 返回碰撞类型
             
         self.body.insert(0, new_head)
         
@@ -52,7 +120,7 @@ class Snake:
         else:
             self.grow = False
             
-        return True
+        return True, None
     
     def change_direction(self, new_direction):
         # 防止反向移动
@@ -61,6 +129,11 @@ class Snake:
     
     def grow_snake(self):
         self.grow = True
+    
+    def get_head_position_pixels(self):
+        """获取蛇头在像素坐标系中的位置"""
+        head_x, head_y = self.body[0]
+        return (head_x * CELL_SIZE + CELL_SIZE // 2, head_y * CELL_SIZE + CELL_SIZE // 2)
     
     def draw(self, screen):
         for i, segment in enumerate(self.body):
@@ -95,6 +168,7 @@ class Game:
         self.snake = Snake()
         self.food = Food()
         self.score = 0
+        self.explosions = []  # 存储爆炸效果
         
         # 改进的中文字体加载
         self.font = self._load_chinese_font()
@@ -173,9 +247,24 @@ class Game:
                         self.snake.change_direction(RIGHT)
         return True
     
+    def create_explosion(self, x, y):
+        """在指定位置创建爆炸效果"""
+        explosion = Explosion(x, y)
+        self.explosions.append(explosion)
+    
     def update(self):
         if not self.game_over:
-            if not self.snake.move():
+            move_result, collision_type = self.snake.move()
+            if not move_result:
+                # 如果撞墙，在蛇头位置创建爆炸效果
+                if collision_type == "wall":
+                    head_x, head_y = self.snake.get_head_position_pixels()
+                    self.create_explosion(head_x, head_y)
+                # 如果撞到自己，也可以创建爆炸效果
+                elif collision_type == "self":
+                    head_x, head_y = self.snake.get_head_position_pixels()
+                    self.create_explosion(head_x, head_y)
+                
                 self.game_over = True
                 return
             
@@ -189,6 +278,11 @@ class Game:
                     self.food.position = self.food.generate_position()
                     if self.food.position not in self.snake.body:
                         break
+        
+        # 更新爆炸效果
+        self.explosions = [explosion for explosion in self.explosions if explosion.active]
+        for explosion in self.explosions:
+            explosion.update()
     
     def draw(self):
         self.screen.fill(BLACK)
@@ -196,6 +290,10 @@ class Game:
         if not self.game_over:
             self.snake.draw(self.screen)
             self.food.draw(self.screen)
+        
+        # 绘制爆炸效果
+        for explosion in self.explosions:
+            explosion.draw(self.screen)
         
         # 显示分数
         score_text = self.font.render(f"分数: {self.score}", True, WHITE)
@@ -219,6 +317,7 @@ class Game:
         self.food = Food()
         self.score = 0
         self.game_over = False
+        self.explosions = []  # 清空爆炸效果
     
     def run(self):
         running = True
