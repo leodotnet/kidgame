@@ -1,77 +1,149 @@
-# 贪吃蛇游戏
+# 🐍 贪吃蛇游戏 (Snake Game)
 
-一个使用Python和Pygame开发的经典贪吃蛇游戏。
+一个用Python和Pygame开发的经典贪吃蛇游戏，支持中文界面显示，兼容Mac、Linux和Windows系统。
 
-## 功能特点
+## 🌟 特性
 
-- 经典的贪吃蛇游戏玩法
-- 流畅的游戏控制
-- 实时分数显示
-- 游戏结束后可重新开始
-- 美观的图形界面
+- 🎮 经典贪吃蛇游戏玩法
+- 🇨🇳 完整中文界面支持
+- 🖥️ 跨平台兼容 (Mac/Linux/Windows)
+- 🎯 智能字体加载系统
+- 🔄 游戏结束后可重新开始
+- ⌨️ 响应式键盘控制
 
-## 安装依赖
+## 🚀 Mac系统快速开始
 
-在运行游戏之前，请先安装所需的依赖包：
-
+### 方法一：一键安装运行
 ```bash
-pip install -r requirements.txt
+# 1. 运行安装脚本
+./setup_mac.sh
+
+# 2. 启动游戏
+./run_mac.sh
 ```
 
-或者直接安装pygame：
-
+### 方法二：手动安装
 ```bash
-pip install pygame
-```
+# 1. 确保已安装Python3
+python3 --version
 
-## 运行游戏
+# 2. 安装pygame
+pip3 install pygame==2.5.2
 
-方式一：直接运行Python文件
-```bash
+# 3. 直接运行游戏
 python3 snake_game.py
 ```
 
-方式二：使用启动脚本
+### 测试中文字体
 ```bash
-./run_game.sh
+# 运行字体测试工具
+python3 test_chinese_font.py
 ```
 
-## 游戏控制
+## 🐧 Linux系统
 
-- **方向键**：控制蛇的移动方向
-  - ↑：向上移动
-  - ↓：向下移动
-  - ←：向左移动
-  - →：向右移动
-- **空格键**：游戏结束后重新开始
-- **ESC键**：退出游戏
-- **关闭窗口**：退出游戏
+```bash
+# 安装依赖
+sudo apt update
+sudo apt install -y python3-pygame fonts-wqy-zenhei fonts-wqy-microhei
 
-## 游戏规则
+# 运行游戏
+./run_game.sh
+# 或
+python3 snake_game.py
+```
 
-1. 控制蛇移动吃掉红色的食物
-2. 每吃掉一个食物，蛇身会增长，分数增加10分
-3. 避免撞到墙壁或蛇身
-4. 游戏结束后可以按空格键重新开始
+## 🪟 Windows系统
 
-## 游戏界面
+```bash
+# 安装pygame
+pip install pygame==2.5.2
 
-- 绿色方块：蛇身
-- 深绿色方块：蛇头
-- 红色方块：食物
-- 左上角显示当前分数
+# 运行游戏  
+python snake_game.py
+```
 
-## 系统要求
+## 🎮 游戏控制
 
-- Python 3.6+
-- Pygame 2.0+
+| 按键 | 功能 |
+|------|------|
+| ↑↓←→ | 控制蛇的移动方向 |
+| 空格键 | 游戏结束后重新开始 |
+| ESC | 退出游戏 |
 
-## 技术特点
+## 🔧 中文显示支持
 
-- 面向对象的代码设计
-- 模块化的游戏组件
-- 碰撞检测
-- 游戏状态管理
-- 事件处理系统
+游戏内置智能字体加载系统，支持以下字体：
 
-享受游戏吧！🐍
+### Mac系统字体
+- PingFang SC (苹方)
+- Hiragino Sans GB (冬青黑体简体中文)  
+- STHeiti (华文黑体)
+- Arial Unicode MS
+
+### Linux系统字体
+- WenQuanYi Zen Hei (文泉驿正黑)
+- WenQuanYi Micro Hei (文泉驿微米黑)
+- Noto Sans CJK
+
+### Windows系统字体
+- Microsoft YaHei (微软雅黑)
+
+## 📁 项目结构
+
+```
+snake-game/
+├── snake_game.py           # 主游戏文件
+├── setup_mac.sh           # Mac系统安装脚本
+├── run_mac.sh             # Mac系统运行脚本  
+├── run_game.sh            # Linux系统运行脚本
+├── test_chinese_font.py   # 中文字体测试工具
+├── requirements.txt       # Python依赖
+├── README.md             # 项目说明
+└── GAME_INFO.md          # 游戏详细信息
+```
+
+## 🔍 故障排除
+
+### 中文显示为方块
+1. 运行字体测试：`python3 test_chinese_font.py`
+2. Mac用户：运行 `./setup_mac.sh` 安装字体
+3. Linux用户：安装中文字体包
+4. 检查系统语言设置
+
+### pygame导入错误
+```bash
+# Mac
+pip3 install pygame==2.5.2
+
+# Linux
+sudo apt install python3-pygame
+
+# Windows  
+pip install pygame==2.5.2
+```
+
+### 权限错误 (Mac/Linux)
+```bash
+chmod +x setup_mac.sh run_mac.sh run_game.sh
+```
+
+## 🎯 游戏截图
+
+游戏界面包含：
+- 中文游戏标题："贪吃蛇游戏"
+- 实时分数显示："分数: XXX"
+- 游戏结束提示："游戏结束!"
+- 操作说明："按空格键重新开始，ESC键退出"
+
+## 🤝 贡献
+
+欢迎提交Issue和Pull Request来改进游戏！
+
+## 📄 许可证
+
+MIT License - 详见LICENSE文件
+
+---
+
+🎮 **享受游戏吧！** 如有问题请提交Issue。
