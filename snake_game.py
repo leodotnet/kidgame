@@ -177,11 +177,13 @@ class Game:
     def _load_chinese_font(self):
         """加载支持中文的字体"""
         font_paths = [
-            # macOS 系统字体（优先）
-            "/System/Library/Fonts/PingFang.ttc",
-            "/System/Library/Fonts/Helvetica.ttc",
+            # STHeiti 华文黑体（优先使用）
             "/System/Library/Fonts/STHeiti Light.ttc",
             "/System/Library/Fonts/STHeiti Medium.ttc",
+            "/System/Library/Fonts/STHeiti.ttc",
+            # macOS 其他系统字体
+            "/System/Library/Fonts/PingFang.ttc",
+            "/System/Library/Fonts/Helvetica.ttc",
             "/System/Library/Fonts/Hiragino Sans GB.ttc",
             "/System/Library/Fonts/Arial Unicode MS.ttf",
             "/Library/Fonts/Arial Unicode MS.ttf",
@@ -211,8 +213,8 @@ class Game:
         # 如果所有字体都失败，尝试系统字体
         try:
             print("尝试使用系统默认字体...")
-            # macOS 系统字体名称
-            mac_fonts = ['PingFang SC', 'Hiragino Sans GB', 'STHeiti', 'Arial Unicode MS']
+            # macOS 系统字体名称（STHeiti 优先）
+            mac_fonts = ['STHeiti', 'STHeiti Light', 'STHeiti Medium', 'PingFang SC', 'Hiragino Sans GB', 'Arial Unicode MS']
             for font_name in mac_fonts:
                 try:
                     font = pygame.font.SysFont(font_name, 36)
